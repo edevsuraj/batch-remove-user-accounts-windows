@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Remove User Accounts (Windows) — Download Batch File</title>
+<meta name="description" content="Download Remove-User.bat — a safe batch script that asks which Windows user(s) to delete and removes the account + profile data. View code online." />
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --border:#334155; --text:#e2e8f0; --muted:#94a3b8; --accent:#22c55e; --accent2:#3b82f6; --warn:#f59e0b; --danger:#ef4444; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Segoe UI,system-ui,-apple-system,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .wrap { max-width:900px; margin:0 auto; padding:24px 16px 64px; }
+  header { text-align:center; padding:32px 0 16px; }
+  header h1 { margin:0 0 8px; font-size:clamp(24px,4vw,38px); }
+  header p { color:var(--muted); margin:4px 0; }
+  .badge { display:inline-block; font-size:12px; border:1px solid var(--border); border-radius:999px; padding:4px 12px; color:var(--muted); margin-bottom:12px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin:16px 0; }
+  .warn { border-left:4px solid var(--warn); background:#451a03; border-color:#92400e; }
+  .warn strong { color:#fbbf24; }
+  .btnrow { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
+  .btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:700; border-radius:10px; padding:12px 20px; border:1px solid transparent; cursor:pointer; font-size:15px; }
+  .btn-green { background:var(--accent); color:#052e16; }
+  .btn-blue { background:var(--accent2); color:#fff; }
+  .btn-ghost { background:transparent; color:var(--text); border-color:var(--border); }
+  .btn:hover { filter:brightness(1.08); }
+  ol.steps li { margin:8px 0; }
+  code.inline { background:#0b1220; border:1px solid var(--border); padding:2px 8px; border-radius:6px; font-size:13.5px; }
+  .codehead { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+  .codehead span { color:var(--muted); font-size:14px; }
+  pre { background:#0b1220; border:1px solid var(--border); border-radius:12px; padding:16px; overflow:auto; max-height:600px; font-size:13px; }
+  pre code { white-space:pre; }
+  footer { text-align:center; color:var(--muted); font-size:13px; margin-top:32px; }
+  footer a { color:#93c5fd; }
+  kbd { background:#0b1220; border:1px solid var(--border); border-bottom-width:2px; border-radius:6px; padding:1px 7px; font-size:13px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="badge">Windows 10 / 11 &bull; Batch Script &bull; GitHub Pages</div>
+    <h1>🧹 Batch Remove User Accounts (Windows)</h1>
+    <p>Run the <code class="inline">Remove-User.bat</code> file as Administrator → it asks <b>which user(s)</b> to delete → deletes the account + <code class="inline">C:\Users\&lt;name&gt;</code> data.</p>
+  </header>
+
+  <div class="card warn">
+    <strong>⚠️ Warning — Data loss is permanent.</strong><br/>
+    Run only as <b>Administrator</b>. Never delete your own logged-in account or system accounts
+    (<code class="inline">Administrator</code>, <code class="inline">Default</code>, <code class="inline">Public</code>, <code class="inline">Guest</code> — script auto-skips these).
+    Close all files of the target user first.
+  </div>
+
+  <div class="card" style="text-align:center">
+    <h2 style="margin-top:0">⬇️ Download</h2>
+    <p style="color:var(--muted)">File: <code class="inline">Remove-User.bat</code> &nbsp;•&nbsp; Size: <span id="size">…</span> &nbsp;•&nbsp; Updated: auto from repo</p>
+    <div class="btnrow" style="justify-content:center">
+      <a class="btn btn-green" href="./Remove-User.bat" download="Remove-User.bat">⬇️ Download Remove-User.bat</a>
+      <button class="btn btn-ghost" id="copyLink">🔗 Copy download link</button>
+      <a class="btn btn-blue" href="https://github.com/edevsuraj/batch-remove-user-accounts-windows" target="_blank" rel="noopener">⭐ GitHub Repo</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">🚀 How to use</h2>
+    <ol class="steps">
+      <li>Click <b>Download</b> above to get <code class="inline">Remove-User.bat</code>.</li>
+      <li><b>Right-click</b> the file → <b>Run as administrator</b> (bina admin ke delete nahi hoga).</li>
+      <li>Script saare local users + <code class="inline">C:\Users</code> folders ki list dikhayega.</li>
+      <li>Jab pooche <i>“Kaun-kaunse user delete karne hai?”</i> → naam likho, e.g. <kbd>test1 test2</kbd> ya <kbd>test1,test2</kbd>.</li>
+      <li><kbd>Y</kbd> se confirm karo → account (<code class="inline">net user /delete</code>) + profile folder + orphan registry entry delete ho jayega.</li>
+      <li>Khud ka logged-in account aur system accounts auto-skip hote hain.</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="codehead">
+      <span>📄 <b style="color:var(--text)">Remove-User.bat</b> — full source (same file as download)</span>
+      <span>
+        <button class="btn btn-ghost" id="copyCode" style="padding:8px 14px;font-size:13px">📋 Copy code</button>
+      </span>
+    </div>
+    <pre><code id="code">Loading Remove-User.bat…</code></pre>
+  </div>
+
+  <div class="card">
+    <h2 style="margin-top:0">❓ FAQ</h2>
+    <p><b>Account delete hua par folder bacha hai?</b><br/><span style="color:var(--muted)">Koi file open/locked hogi. PC restart karke script dobara chalao, ya folder manually delete karo.</span></p>
+    <p><b>Spelling galat ho gayi?</b><br/><span style="color:var(--muted)">Script “account nahi mila” bolkar skip kar dega — kuch delete nahi hoga.</span></p>
+    <p><b>Site ko update kaise karein?</b><br/><span style="color:var(--muted)">Sirf <code class="inline">Remove-User.bat</code> edit karke push karo — ye page wahi file fetch karke code dikhata hai, alag se copy-paste nahi karna.</span></p>
+  </div>
+
+  <footer>
+    Hosted on <b>GitHub Pages</b> • Repo: <a href="https://github.com/edevsuraj/batch-remove-user-accounts-windows">edevsuraj/batch-remove-user-accounts-windows</a><br/>
+    Made for quick cleanup of test / old Windows accounts.
+  </footer>
+</div>
+
+<script>
+  const BAT_URL = './Remove-User.bat';
+  const codeEl = document.getElementById('code');
+
+  // Load the real .bat file so download + displayed code never go out of sync
+  fetch(BAT_URL)
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const len = r.headers.get('content-length');
+      if (len) document.getElementById('size').textContent = (len / 1024).toFixed(1) + ' KB';
+      return r.text();
+    })
+    .then(t => { codeEl.textContent = t; })
+    .catch(e => { codeEl.textContent = 'Could not auto-load Remove-User.bat (' + e.message + '). Download button se file le lo, ya repo me dekho.'; });
+
+  document.getElementById('copyCode').onclick = async () => {
+    try { await navigator.clipboard.writeText(codeEl.textContent); alert('Code copied!'); }
+    catch { alert('Copy failed — manually select the code.'); }
+  };
+  document.getElementById('copyLink').onclick = async () => {
+    try { await navigator.clipboard.writeText(new URL(BAT_URL, location.href).href); alert('Download link copied!'); }
+    catch { alert('Copy failed.'); }
+  };
+</script>
+</body>
+</html>
