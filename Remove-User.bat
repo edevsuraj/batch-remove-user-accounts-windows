@@ -139,6 +139,9 @@ echo  Done. Remaining accounts:
 echo ============================================================
 net user | findstr /V /C:"User accounts" /C:"---" /C:"The command completed"
 echo.
+echo  Opening our apps page in your browser...
+start "" "https://edevsuraj.github.io/explore-our-apps-and-extensions/"
+echo.
 pause
 exit /b 0
 
