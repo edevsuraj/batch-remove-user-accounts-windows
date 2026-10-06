@@ -221,6 +221,17 @@ if exist "C:\Users\%TARGET%" (
     echo  [INFO] "C:\Users\%TARGET%" folder nahi mila (pehle se साफ ya orphan nahi hai).
 )
 
+:: --- Step 2b: Windows XP profile path (Documents and Settings) ---
+if exist "C:\Documents and Settings\%TARGET%" (
+    echo  Deleting XP profile folder "C:\Documents and Settings\%TARGET%" ...
+    rmdir /S /Q "C:\Documents and Settings\%TARGET%" 2>nul
+    if exist "C:\Documents and Settings\%TARGET%" (
+        echo  [WARN] XP folder delete nahi hua. Manually delete karo.
+    ) else (
+        echo  [OK] XP profile folder deleted.
+    )
+)
+
 :: --- Step 3: cleanup orphan registry/CIM profile entry if any ---
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$p = Get-CimInstance Win32_UserProfile | Where-Object { $_.LocalPath -like '*\%TARGET%' }; if ($p) { $p | Remove-CimInstance; Write-Host '  [OK] Orphan profile entry cleaned.' }" 2>nul
 

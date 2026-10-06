@@ -130,7 +130,7 @@
 <main class="container">
 
   <section class="hero">
-    <span class="badge"><span class="dot"></span>Windows 10 / 11 &middot; Batch script</span>
+    <span class="badge"><span class="dot"></span>Windows 7 / 8 / 10 / 11 &middot; Batch script</span>
     <h1>Remove Windows user accounts &amp; leftover profile data</h1>
     <p class="lede">Run <code>Remove-User.bat</code> as Administrator, pick accounts from a popup list, and the script deletes each account plus its <code>C:\Users\&lt;name&gt;</code> data. Guest, Default, Public and extra Admin accounts are included — only your own login stays protected.</p>
     <div class="actions">
@@ -198,6 +198,10 @@
     <details>
       <summary>The popup doesn't appear. What now?</summary>
       <p>The script falls back to manual typing automatically. Type names separated by spaces or commas, e.g. <kbd>test1 test2</kbd>, and press Enter.</p>
+    </details>
+    <details>
+      <summary>Does it work on Windows 7, 8 or XP?</summary>
+      <p>Yes, with automatic fallbacks. On <strong>Windows 8 / 10 / 11</strong> everything works including the popup picker. On <strong>Windows 7</strong> the popup needs PowerShell 3.0 or newer (present on most updated PCs) — otherwise the script falls back to manual typing, and deletion itself uses plain <code>net user</code> + folder delete, which work everywhere. On <strong>XP</strong> there is no popup (no PowerShell), so manual mode is used and the script also checks the old <code>Documents and Settings</code> profile path.</p>
     </details>
     <details>
       <summary>How is this page updated?</summary>

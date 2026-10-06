@@ -29,6 +29,17 @@ Batch script for Windows 10/11 that asks **which user(s) to delete** and removes
 - Close the target user's files/apps first; locked folders may need a reboot + re-run.
 - If a name doesn't exist, the script skips it ("account nahi mila").
 
+## Compatibility
+
+| OS | Popup picker | Delete (account + data) |
+|---|---|---|
+| Windows 10 / 11 | ✅ | ✅ |
+| Windows 8 / 8.1 | ✅ (PowerShell 3.0+ built in) | ✅ |
+| Windows 7 | Needs PowerShell 3.0+ (WMF update), else auto-falls-back to manual typing | ✅ (`net user` + folder delete) |
+| Windows XP | ❌ (no PowerShell) → manual typing | ✅ account; profile folder via `Documents and Settings` path |
+
+Notes: `Get-LocalUser` needs PowerShell 5.1 (Win 10+), so on older systems the script parses `net user` output instead. `Get-CimInstance` profile cleanup needs PowerShell 3.0+ and is silently skipped where unavailable — the main `rmdir` folder delete always runs.
+
 ## Host on GitHub Pages (already done in this repo)
 
 1. Push `Remove-User.bat` + `index.html` to `main` (root folder).
