@@ -64,6 +64,13 @@
   .repo-link{display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:var(--muted); text-decoration:none; border:1px solid var(--border); border-radius:9px; padding:7px 13px; background:#fff}
   .repo-link:hover{color:var(--text); border-color:#c6cfdd}
   .repo-link svg{width:16px; height:16px}
+  .header-links{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; padding:2px 20px 14px}
+  .header-link{display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; padding:7px 15px; border-radius:999px; border:1px solid var(--border); background:#fff; color:var(--muted); text-decoration:none}
+  .header-link:hover{color:var(--text); border-color:#c6cfdd}
+  .header-link svg{width:15px; height:15px; flex:none}
+  .header-link.coffee svg{color:#b45309}
+  .header-link.email svg{color:var(--primary)}
+  .header-link.upi svg{color:#16a34a}
   .top-title{flex:1; text-align:center; font-weight:700; font-size:14.5px; letter-spacing:-.01em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; padding:0 12px}
 
   /* Hero */
@@ -161,6 +168,20 @@
       GitHub
     </a>
   </div>
+  <nav class="header-links" aria-label="Support links">
+      <a class="header-link coffee" href="https://buymeacoffee.com/surajchauhan" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/></svg>
+        Buy Me a Coffee
+      </a>
+      <a class="header-link email" href="mailto:edev.suraj@gmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        edev.suraj@gmail.com
+      </a>
+      <a class="header-link upi" href="upi://pay?pa=8112773132@upi&pn=Suraj%20Chauhan&am=&cu=INR">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>
+        UPI: 8112773132
+      </a>
+  </nav>
 </header>
 
 <main class="container">
