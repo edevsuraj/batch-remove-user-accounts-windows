@@ -6,8 +6,8 @@ color 0E
 
 :: ============================================================
 ::  Remove-User.bat
-::  Run as Administrator. Asks which user(s) to delete,
-::  then deletes the account + profile data (C:\Users\<name>).
+::  Run as Administrator. Popup list se select karo kaun-kaunse user delete
+::  karne hain (ya naam manually likho), phir account + C:\Users\<name> data delete.
 ::  Guest / Default / Public / dusre Admin accounts BHI delete hote hain.
 ::  Sirf 2 cheez safe: (1) khud ka logged-in user, (2) Windows service profiles.
 ::  WARNING: Deleted data cannot be recovered.
@@ -47,10 +47,56 @@ echo  Guest / Default / Public / dusre Admin BHI delete honge.
 echo  Sirf tumhara khud ka account (%USERNAME%) safe rahega.
 echo ------------------------------------------------------------
 echo.
+echo  Kaise select karna hai?
+echo   [1] Popup list se select karo (Recommended - list me se highlight + OK)
+echo   [2] Naam manually type karo
+echo.
+set "MODE="
+set /p "MODE=Choice (1/2, Enter=1): "
+if "%MODE%"=="2" goto :manual
+goto :popup
+
+:: ============================================================
+::  POPUP: PowerShell Out-GridView se multi-select
+:: ============================================================
+:popup
+set "PICKFILE=%TEMP%\picked_users.txt"
+if exist "%PICKFILE%" del /q "%PICKFILE%" 2>nul
+echo.
+echo  Popup khul raha hai... delete karne wale users SELECT karo, phir OK dabao.
+echo  (Ctrl key ke saath click = multiple select. Cancel = manual typing.)
+echo.
+powershell -NoProfile -STA -ExecutionPolicy Bypass -Command "$self=$env:USERNAME; $svc=@('All Users','systemprofile','LocalService','NetworkService'); $acc=@(); try { $acc=@(Get-LocalUser -ErrorAction Stop | Where-Object { $_.Name -ne $self } | ForEach-Object { [pscustomobject]@{Name=$_.Name; Enabled=([string]$_.Enabled); Type='Account'} }) } catch { $raw=net user; foreach ($ln in $raw) { $t=$ln.Trim(); if ($t -and $t -notmatch '^-+$' -and $t -ne 'User accounts' -and $t -notmatch 'command completed' -and $t -notmatch 'accounts for') { foreach ($w in ($t -split '\s+')) { if ($w -and $w -ne $self -and $w -notmatch '^\\\\') { $acc+=@([pscustomobject]@{Name=$w; Enabled='?'; Type='Account'}) } } } } }; $prof=@(Get-ChildItem 'C:\Users' -Directory -Force -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne $self -and $svc -notcontains $_.Name -and ($acc.Name -notcontains $_.Name) } | ForEach-Object { [pscustomobject]@{Name=$_.Name; Enabled='-'; Type='Folder'} }); $all=@($acc)+@($prof); if (-not $all -or $all.Count -eq 0) { 'NO_USERS_FOUND' } else { $sel=$all | Out-GridView -Title 'Delete karne wale users select karo (Ctrl+Click = multiple) - OK dabao' -OutputMode Multiple; if ($sel) { $sel | ForEach-Object { $_.Name } } }" > "%PICKFILE%" 2>nul
+set "USERS="
+if not exist "%PICKFILE%" goto :manual
+findstr /I /C:"NO_USERS_FOUND" "%PICKFILE%" >nul 2>&1
+if not errorlevel 1 (
+    del /q "%PICKFILE%" 2>nul
+    echo.
+    echo  [INFO] Delete karne layak koi aur user nahi mila.
+    echo.
+    pause
+    goto menu
+)
+for /f "usebackq delims=" %%L in ("%PICKFILE%") do (
+    if defined USERS (
+        set "USERS=!USERS! "%%L""
+    ) else (
+        set "USERS="%%L""
+    )
+)
+del /q "%PICKFILE%" 2>nul
+if not defined USERS goto :manual
+goto :confirm
+
+:: ============================================================
+::  MANUAL: naam type karo
+:: ============================================================
+:manual
 set "USERS="
 set /p "USERS=Kaun-kaunse user delete karne hai? (space ya comma se alag likho, e.g. test1 test2): "
 
-:: Trim check - empty input
+:: Empty input
 if not defined USERS (
     echo.
     echo  [ERROR] Koi naam nahi likha. Dobara try karo.
@@ -61,6 +107,8 @@ if not defined USERS (
 
 :: Replace commas with spaces so FOR loop works
 set "USERS=%USERS:,= %"
+
+:confirm
 
 echo.
 echo  Aapne ye users likhe: %USERS%
@@ -83,7 +131,7 @@ echo  Deleting... please wait.
 echo ============================================================
 echo.
 
-for %%U in (%USERS%) do call :DeleteOne "%%U"
+for %%U in (%USERS%) do call :DeleteOne %%U
 
 echo.
 echo ============================================================

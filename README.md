@@ -17,7 +17,7 @@ Batch script for Windows 10/11 that asks **which user(s) to delete** and removes
 1. Download `Remove-User.bat` from the [Pages site](https://edevsuraj.github.io/batch-remove-user-accounts-windows/) or this repo.
 2. **Right-click → Run as administrator.**
 3. Script lists local accounts + `C:\Users` folders.
-4. Enter username(s), e.g. `test1 test2` or `test1,test2`.
+4. A popup list opens — select user(s) (`Ctrl+Click` = multiple) → `OK`. If the popup is cancelled or can't open, type names manually, e.g. `test1 test2`.
 5. Confirm with `Y` → account (`net user /delete`) + profile folder + orphan profile entry deleted.
 6. Self account (`%USERNAME%`) auto-skip hota hai — wahi ek admin bachega. **Guest / Default / Public / dusre Admin accounts — sab delete honge** agar naam likha.
 
