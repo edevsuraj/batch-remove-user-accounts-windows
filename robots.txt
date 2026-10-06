@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://edevsuraj.github.io/batch-remove-user-accounts-windows/sitemap.xml
