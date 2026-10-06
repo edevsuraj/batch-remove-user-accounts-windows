@@ -3,121 +3,250 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Remove User Accounts (Windows) — Download Batch File</title>
-<meta name="description" content="Download Remove-User.bat — a safe batch script that asks which Windows user(s) to delete and removes the account + profile data. View code online." />
+<title>Remove Windows User Accounts — Download Batch Script</title>
+<meta name="description" content="Download Remove-User.bat — pick Windows users from a popup list and remove their accounts plus profile data. View the full source online." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 <style>
-  :root { --bg:#0f172a; --card:#1e293b; --border:#334155; --text:#e2e8f0; --muted:#94a3b8; --accent:#22c55e; --accent2:#3b82f6; --warn:#f59e0b; --danger:#ef4444; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:Segoe UI,system-ui,-apple-system,Arial,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  .wrap { max-width:900px; margin:0 auto; padding:24px 16px 64px; }
-  header { text-align:center; padding:32px 0 16px; }
-  header h1 { margin:0 0 8px; font-size:clamp(24px,4vw,38px); }
-  header p { color:var(--muted); margin:4px 0; }
-  .badge { display:inline-block; font-size:12px; border:1px solid var(--border); border-radius:999px; padding:4px 12px; color:var(--muted); margin-bottom:12px; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin:16px 0; }
-  .warn { border-left:4px solid var(--warn); background:#451a03; border-color:#92400e; }
-  .warn strong { color:#fbbf24; }
-  .btnrow { display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
-  .btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; font-weight:700; border-radius:10px; padding:12px 20px; border:1px solid transparent; cursor:pointer; font-size:15px; }
-  .btn-green { background:var(--accent); color:#052e16; }
-  .btn-blue { background:var(--accent2); color:#fff; }
-  .btn-ghost { background:transparent; color:var(--text); border-color:var(--border); }
-  .btn:hover { filter:brightness(1.08); }
-  ol.steps li { margin:8px 0; }
-  code.inline { background:#0b1220; border:1px solid var(--border); padding:2px 8px; border-radius:6px; font-size:13.5px; }
-  .codehead { display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
-  .codehead span { color:var(--muted); font-size:14px; }
-  pre { background:#0b1220; border:1px solid var(--border); border-radius:12px; padding:16px; overflow:auto; max-height:600px; font-size:13px; }
-  pre code { white-space:pre; }
-  footer { text-align:center; color:var(--muted); font-size:13px; margin-top:32px; }
-  footer a { color:#93c5fd; }
-  kbd { background:#0b1220; border:1px solid var(--border); border-bottom-width:2px; border-radius:6px; padding:1px 7px; font-size:13px; }
+  :root{
+    --bg:#f5f7fa; --surface:#ffffff; --border:#e3e8f0;
+    --text:#101828; --muted:#667085;
+    --primary:#1f6feb; --primary-dark:#1a5fd0;
+    --warn-bg:#fffaeb; --warn-border:#f6c343; --warn-text:#7a4a00;
+    --code-bg:#0d1526; --code-border:#1e2a44;
+    --radius:14px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:"Inter",-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    line-height:1.65; font-size:16px;
+  }
+  .container{max-width:880px; margin:0 auto; padding:0 20px}
+
+  /* Top bar */
+  .topbar{background:var(--surface); border-bottom:1px solid var(--border)}
+  .topbar-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 20px; max-width:880px; margin:0 auto}
+  .brand{display:flex; align-items:center; gap:9px; font-weight:700; font-size:15px; letter-spacing:-.01em}
+  .brand-mark{width:28px; height:28px; border-radius:8px; background:var(--primary); color:#fff; display:inline-flex; align-items:center; justify-content:center; flex:none}
+  .brand-mark svg{width:16px; height:16px}
+  .repo-link{display:inline-flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:var(--muted); text-decoration:none; border:1px solid var(--border); border-radius:9px; padding:7px 13px; background:#fff}
+  .repo-link:hover{color:var(--text); border-color:#c6cfdd}
+  .repo-link svg{width:16px; height:16px}
+
+  /* Hero */
+  .hero{padding:56px 0 8px; text-align:left}
+  .badge{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:600; color:var(--primary); background:#e8f0fe; border:1px solid #c9dcfb; border-radius:999px; padding:5px 13px; margin-bottom:18px}
+  .badge .dot{width:7px; height:7px; border-radius:50%; background:var(--primary)}
+  h1{margin:0 0 14px; font-size:clamp(1.7rem,1.15rem + 2.8vw,2.6rem); line-height:1.18; letter-spacing:-.03em; font-weight:800}
+  .lede{margin:0 0 26px; color:var(--muted); font-size:clamp(1rem,.95rem + .4vw,1.12rem); max-width:640px}
+  .lede code{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.86em; background:#eceff4; border:1px solid var(--border); border-radius:6px; padding:1px 7px; color:var(--text); white-space:nowrap}
+
+  .actions{display:flex; gap:12px; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; justify-content:center; gap:9px; font-weight:600; font-size:15px; border-radius:10px; padding:13px 22px; text-decoration:none; border:1px solid transparent; cursor:pointer; font-family:inherit; transition:background .15s,border-color .15s,transform .05s}
+  .btn:active{transform:translateY(1px)}
+  .btn svg{width:17px; height:17px; flex:none}
+  .btn-primary{background:var(--primary); color:#fff; box-shadow:0 1px 2px rgba(16,24,40,.12)}
+  .btn-primary:hover{background:var(--primary-dark)}
+  .btn-outline{background:var(--surface); color:var(--text); border-color:var(--border)}
+  .btn-outline:hover{border-color:#c6cfdd; background:#fafbfc}
+  .file-meta{margin:16px 0 0; font-size:13.5px; color:var(--muted)}
+  .file-meta code{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.9em}
+
+  /* Cards */
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:26px; margin:22px 0; box-shadow:0 1px 2px rgba(16,24,40,.05)}
+  .card h2{margin:0 0 6px; font-size:1.15rem; letter-spacing:-.01em; display:flex; align-items:center; gap:9px}
+  .card h2 svg{width:19px; height:19px; color:var(--primary); flex:none}
+  .card .sub{margin:0 0 14px; color:var(--muted); font-size:14.5px}
+
+  /* Warning */
+  .notice{background:var(--warn-bg); border:1px solid var(--warn-border); border-radius:var(--radius); padding:18px 20px; margin:26px 0; display:flex; gap:13px; align-items:flex-start}
+  .notice svg{width:21px; height:21px; color:#b54708; flex:none; margin-top:2px}
+  .notice p{margin:0; font-size:14.5px; color:var(--warn-text)}
+  .notice strong{display:block; margin-bottom:3px; font-size:15px}
+  .notice code{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.86em; background:rgba(180,120,0,.12); border-radius:5px; padding:0 6px}
+
+  /* Steps */
+  ol.steps{list-style:none; counter-reset:step; margin:18px 0 4px; padding:0}
+  ol.steps li{counter-increment:step; position:relative; padding:0 0 18px 46px; font-size:15px}
+  ol.steps li:last-child{padding-bottom:2px}
+  ol.steps li::before{content:counter(step); position:absolute; left:0; top:1px; width:30px; height:30px; border-radius:50%; background:#e8f0fe; color:var(--primary); font-weight:700; font-size:14px; display:flex; align-items:center; justify-content:center}
+  ol.steps li:not(:last-child)::after{content:""; position:absolute; left:14.5px; top:35px; bottom:2px; width:1.5px; background:var(--border)}
+  ol.steps code, p code{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.85em; background:#eef1f6; border:1px solid var(--border); border-radius:6px; padding:1px 7px; white-space:nowrap}
+  kbd{font-family:"JetBrains Mono",ui-monospace,monospace; font-size:.82em; background:#fff; border:1px solid var(--border); border-bottom-width:2px; border-radius:6px; padding:1px 7px}
+
+  /* Code viewer */
+  .code-head{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
+  .code-title{display:flex; align-items:center; gap:10px; font-size:14px; color:var(--muted); min-width:0}
+  .dots{display:inline-flex; gap:5px; flex:none}
+  .dots i{width:10px; height:10px; border-radius:50%; background:#d4dae3; display:block}
+  .code-title code{font-family:"JetBrains Mono",ui-monospace,monospace; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .btn-sm{padding:8px 14px; font-size:13.5px; border-radius:8px}
+  pre{background:var(--code-bg); border:1px solid var(--code-border); border-radius:11px; padding:18px; margin:0; overflow:auto; max-height:560px}
+  pre code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace; font-size:12.8px; line-height:1.7; color:#d6e2f5; white-space:pre}
+
+  /* FAQ */
+  details{border:1px solid var(--border); border-radius:10px; padding:14px 17px; margin:10px 0; background:#fbfcfe}
+  details summary{font-weight:600; font-size:15px; cursor:pointer; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:10px}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"+"; font-size:20px; font-weight:400; color:var(--muted); flex:none}
+  details[open] summary::after{content:"–"}
+  details p{margin:10px 0 2px; font-size:14.5px; color:var(--muted)}
+
+  footer{border-top:1px solid var(--border); margin-top:36px; padding:26px 0 40px; text-align:center; color:var(--muted); font-size:13.5px}
+  footer a{color:var(--primary); text-decoration:none; font-weight:600}
+  footer a:hover{text-decoration:underline}
+
+  @media (max-width:640px){
+    .hero{padding:40px 0 4px}
+    .card{padding:20px 18px}
+    .actions{flex-direction:column; align-items:stretch}
+    .btn{width:100%}
+    .topbar-inner{padding:12px 16px}
+    .brand span{display:none}
+    pre{padding:14px; font-size:12px}
+  }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header>
-    <div class="badge">Windows 10 / 11 &bull; Batch Script &bull; GitHub Pages</div>
-    <h1>🧹 Batch Remove User Accounts (Windows)</h1>
-    <p>Run the <code class="inline">Remove-User.bat</code> file as Administrator → it asks <b>which user(s)</b> to delete → deletes the account + <code class="inline">C:\Users\&lt;name&gt;</code> data.</p>
-  </header>
-
-  <div class="card warn">
-    <strong>⚠️ Warning — Data loss is permanent.</strong><br/>
-    Run only as <b>Administrator</b>. <b>Guest / Default / Public / other Admin accounts BHI delete honge</b> agar naam likha to.
-    Sirf tumhara khud ka logged-in account safe rahega (auto-skip).
-    <code class="inline">Default</code> naya-user template hai aur <code class="inline">Public</code> shared folder hai — inhe delete karne se naye user / sharing toot sakta hai.
-  </div>
-
-  <div class="card" style="text-align:center">
-    <h2 style="margin-top:0">⬇️ Download</h2>
-    <p style="color:var(--muted)">File: <code class="inline">Remove-User.bat</code> &nbsp;•&nbsp; Size: <span id="size">…</span> &nbsp;•&nbsp; Updated: auto from repo</p>
-    <div class="btnrow" style="justify-content:center">
-      <a class="btn btn-green" href="./Remove-User.bat" download="Remove-User.bat">⬇️ Download Remove-User.bat</a>
-      <button class="btn btn-ghost" id="copyLink">🔗 Copy download link</button>
-      <a class="btn btn-blue" href="https://github.com/edevsuraj/batch-remove-user-accounts-windows" target="_blank" rel="noopener">⭐ GitHub Repo</a>
-    </div>
-  </div>
-
-  <div class="card">
-    <h2 style="margin-top:0">🚀 How to use</h2>
-    <ol class="steps">
-      <li>Click <b>Download</b> above to get <code class="inline">Remove-User.bat</code>.</li>
-      <li><b>Right-click</b> the file → <b>Run as administrator</b> (bina admin ke delete nahi hoga).</li>
-      <li>Script saare local users + <code class="inline">C:\Users</code> folders ki list dikhayega.</li>
-      <li><b>Popup</b> khulega — list me se delete wale users select karo (<kbd>Ctrl</kbd>+click = multiple), phir <b>OK</b>. Popup cancel/na khule to naam manually likho, e.g. <kbd>test1 test2</kbd>.</li>
-      <li><kbd>Y</kbd> se confirm karo → account (<code class="inline">net user /delete</code>) + profile folder + orphan registry entry delete ho jayega.</li>
-      <li>Khud ka logged-in account auto-skip hota hai (wahi ek admin bachega). <b>Guest / Default / Public / dusre Admin — sab delete honge</b> agar naam likha.</li>
-    </ol>
-  </div>
-
-  <div class="card">
-    <div class="codehead">
-      <span>📄 <b style="color:var(--text)">Remove-User.bat</b> — full source (same file as download)</span>
-      <span>
-        <button class="btn btn-ghost" id="copyCode" style="padding:8px 14px;font-size:13px">📋 Copy code</button>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
       </span>
+      <span>UserCleanup</span>
     </div>
-    <pre><code id="code">Loading Remove-User.bat…</code></pre>
+    <a class="repo-link" href="https://github.com/edevsuraj/batch-remove-user-accounts-windows" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      GitHub
+    </a>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <span class="badge"><span class="dot"></span>Windows 10 / 11 &middot; Batch script</span>
+    <h1>Remove Windows user accounts &amp; leftover profile data</h1>
+    <p class="lede">Run <code>Remove-User.bat</code> as Administrator, pick accounts from a popup list, and the script deletes each account plus its <code>C:\Users\&lt;name&gt;</code> data. Guest, Default, Public and extra Admin accounts are included — only your own login stays protected.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="./Remove-User.bat" download="Remove-User.bat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download Remove-User.bat
+      </a>
+      <button class="btn btn-outline" id="copyLink" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        Copy download link
+      </button>
+    </div>
+    <p class="file-meta">File: <code>Remove-User.bat</code> &nbsp;&middot;&nbsp; Size: <span id="size">&hellip;</span></p>
+  </section>
+
+  <div class="notice" role="alert">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    <p><strong>Deletion is permanent and includes system profiles.</strong>Run as Administrator. Only your own logged-in account is auto-skipped. <code>Default</code> is the template for new users and <code>Public</code> is shared storage — deleting them can break new-user creation and sharing. Close the target user's apps and files first.</p>
   </div>
 
-  <div class="card">
-    <h2 style="margin-top:0">❓ FAQ</h2>
-    <p><b>Account delete hua par folder bacha hai?</b><br/><span style="color:var(--muted)">Koi file open/locked hogi. PC restart karke script dobara chalao, ya folder manually delete karo.</span></p>
-    <p><b>Spelling galat ho gayi?</b><br/><span style="color:var(--muted)">Script “account nahi mila” bolkar skip kar dega — kuch delete nahi hoga.</span></p>
-    <p><b>Site ko update kaise karein?</b><br/><span style="color:var(--muted)">Sirf <code class="inline">Remove-User.bat</code> edit karke push karo — ye page wahi file fetch karke code dikhata hai, alag se copy-paste nahi karna.</span></p>
-  </div>
+  <section class="card">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      How to use
+    </h2>
+    <p class="sub">Takes under a minute. No installation needed.</p>
+    <ol class="steps">
+      <li>Download <code>Remove-User.bat</code> using the button above.</li>
+      <li><strong>Right-click</strong> the file and choose <strong>Run as administrator</strong>.</li>
+      <li>Choose <kbd>1</kbd> for the <strong>popup list</strong> — highlight accounts (<kbd>Ctrl</kbd> + click for multiple) and press <strong>OK</strong>. Choose <kbd>2</kbd> to type names manually instead.</li>
+      <li>Confirm with <kbd>Y</kbd>. Each account (<code>net user /delete</code>), its profile folder and orphan registry entries are removed.</li>
+      <li>Your own logged-in account is never deleted — it remains as the surviving admin.</li>
+    </ol>
+  </section>
 
-  <footer>
-    Hosted on <b>GitHub Pages</b> • Repo: <a href="https://github.com/edevsuraj/batch-remove-user-accounts-windows">edevsuraj/batch-remove-user-accounts-windows</a><br/>
-    Made for quick cleanup of test / old Windows accounts.
-  </footer>
-</div>
+  <section class="card">
+    <div class="code-head">
+      <div class="code-title">
+        <span class="dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <code>Remove-User.bat</code>
+        <span>&mdash; source, always in sync with the download</span>
+      </div>
+      <button class="btn btn-outline btn-sm" id="copyCode" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy code
+      </button>
+    </div>
+    <pre><code id="code">Loading Remove-User.bat&hellip;</code></pre>
+  </section>
+
+  <section class="card">
+    <h2>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      FAQ
+    </h2>
+    <p class="sub">Common questions before you run the script.</p>
+    <details>
+      <summary>What exactly gets deleted?</summary>
+      <p>The local account (<code>net user /delete</code>), the <code>C:\Users\&lt;name&gt;</code> profile folder, and any orphaned profile registry entries. There is no recycle bin for this — it is unrecoverable.</p>
+    </details>
+    <details>
+      <summary>A folder survived the run. Why?</summary>
+      <p>A file was open or locked by another process. Restart the PC, make sure nothing of that user is running, and run the script again — or delete the folder manually.</p>
+    </details>
+    <details>
+      <summary>The popup doesn't appear. What now?</summary>
+      <p>The script falls back to manual typing automatically. Type names separated by spaces or commas, e.g. <kbd>test1 test2</kbd>, and press Enter.</p>
+    </details>
+    <details>
+      <summary>How is this page updated?</summary>
+      <p>It fetches <code>Remove-User.bat</code> from the repo at load time, so the download button and the displayed source can never go out of sync. Just edit the batch file and push.</p>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  <div class="container">
+    Hosted on <strong>GitHub Pages</strong> &middot; <a href="https://github.com/edevsuraj/batch-remove-user-accounts-windows">edevsuraj/batch-remove-user-accounts-windows</a>
+  </div>
+</footer>
 
 <script>
-  const BAT_URL = './Remove-User.bat';
-  const codeEl = document.getElementById('code');
+  var BAT_URL = './Remove-User.bat';
+  var codeEl = document.getElementById('code');
 
-  // Load the real .bat file so download + displayed code never go out of sync
-  fetch(BAT_URL)
-    .then(r => {
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      const len = r.headers.get('content-length');
-      if (len) document.getElementById('size').textContent = (len / 1024).toFixed(1) + ' KB';
-      return r.text();
-    })
-    .then(t => { codeEl.textContent = t; })
-    .catch(e => { codeEl.textContent = 'Could not auto-load Remove-User.bat (' + e.message + '). Download button se file le lo, ya repo me dekho.'; });
+  function copyText(t, okMsg) {
+    function done() { alert(okMsg); }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(t).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      var ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); }
+      catch (e) { alert('Copy failed — please select the text manually.'); }
+      document.body.removeChild(ta);
+    }
+  }
 
-  document.getElementById('copyCode').onclick = async () => {
-    try { await navigator.clipboard.writeText(codeEl.textContent); alert('Code copied!'); }
-    catch { alert('Copy failed — manually select the code.'); }
-  };
-  document.getElementById('copyLink').onclick = async () => {
-    try { await navigator.clipboard.writeText(new URL(BAT_URL, location.href).href); alert('Download link copied!'); }
-    catch { alert('Copy failed.'); }
-  };
+  fetch(BAT_URL).then(function (r) {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.arrayBuffer();
+  }).then(function (buf) {
+    document.getElementById('size').textContent = (buf.byteLength / 1024).toFixed(1) + ' KB';
+    codeEl.textContent = new TextDecoder().decode(buf);
+  }).catch(function (e) {
+    codeEl.textContent = 'Could not auto-load Remove-User.bat (' + e.message + '). Use the download button above or view the file in the repo.';
+  });
+
+  document.getElementById('copyCode').addEventListener('click', function () {
+    copyText(codeEl.textContent, 'Script code copied to clipboard.');
+  });
+  document.getElementById('copyLink').addEventListener('click', function () {
+    copyText(new URL(BAT_URL, location.href).href, 'Download link copied to clipboard.');
+  });
 </script>
 </body>
 </html>
