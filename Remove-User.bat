@@ -208,7 +208,7 @@ if exist "C:\Users\%TARGET%" (
     rmdir /S /Q "C:\Users\%TARGET%" 2>nul
     if exist "C:\Users\%TARGET%" (
         echo  [WARN] Folder locked hai (koi file open hogi). Safe delete ke liye PowerShell se try kar rahe...
-        powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Get-CimInstance Win32_UserProfile ^| Where-Object { $_.LocalPath -eq 'C:\Users\%TARGET%' } ^| Remove-CimInstance -ErrorAction Stop; Write-Host '  [OK] Profile CIM se removed.' } catch { Write-Host ('  [FAIL] Profile remove nahi hua: ' + $_.Exception.Message) }"
+        powershell -NoProfile -ExecutionPolicy Bypass -Command "try { Get-CimInstance Win32_UserProfile | Where-Object { $_.LocalPath -eq 'C:\Users\%TARGET%' } | Remove-CimInstance -ErrorAction Stop; Write-Host '  [OK] Profile CIM se removed.' } catch { Write-Host ('  [FAIL] Profile remove nahi hua: ' + $_.Exception.Message) }"
         if exist "C:\Users\%TARGET%" (
             echo  [FAIL] "C:\Users\%TARGET%" abhi bhi hai. PC restart karke dobara chalao ya manually delete karo.
         ) else (
