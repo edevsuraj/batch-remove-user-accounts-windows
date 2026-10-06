@@ -19,7 +19,9 @@ Batch script for Windows 10/11 that asks **which user(s) to delete** and removes
 3. Script lists local accounts + `C:\Users` folders.
 4. Enter username(s), e.g. `test1 test2` or `test1,test2`.
 5. Confirm with `Y` → account (`net user /delete`) + profile folder + orphan profile entry deleted.
-6. Self account (`%USERNAME%`) and system accounts (`Administrator`, `Guest`, `Default`, `Public`, …) are auto-skipped.
+6. Self account (`%USERNAME%`) auto-skip hota hai — wahi ek admin bachega. **Guest / Default / Public / dusre Admin accounts — sab delete honge** agar naam likha.
+
+> ⚠️ `Default` naye users ka template hai, `Public` shared folder hai. Ye delete karne se naye user banane / sharing me problem aa sakti hai. Sirf jaan-bujhkar delete karo.
 
 ## Safety
 

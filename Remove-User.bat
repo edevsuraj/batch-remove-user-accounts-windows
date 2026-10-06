@@ -8,6 +8,8 @@ color 0E
 ::  Remove-User.bat
 ::  Run as Administrator. Asks which user(s) to delete,
 ::  then deletes the account + profile data (C:\Users\<name>).
+::  Guest / Default / Public / dusre Admin accounts BHI delete hote hain.
+::  Sirf 2 cheez safe: (1) khud ka logged-in user, (2) Windows service profiles.
 ::  WARNING: Deleted data cannot be recovered.
 ::  Repo: https://github.com/edevsuraj/batch-remove-user-accounts-windows
 :: ============================================================
@@ -41,6 +43,8 @@ echo.
 echo ------------------------------------------------------------
 echo  WARNING: Selected user ka account + C:\Users\^<name^> ka
 echo  saara data PERMANENTLY delete ho jayega. Soch kar aage badhe.
+echo  Guest / Default / Public / dusre Admin BHI delete honge.
+echo  Sirf tumhara khud ka account (%USERNAME%) safe rahega.
 echo ------------------------------------------------------------
 echo.
 set "USERS="
@@ -103,18 +107,33 @@ if "%TARGET%"==" " exit /b 0
 echo ----------------------------------------
 echo  -^> Processing: "%TARGET%"
 
-:: --- Safety: never delete self ---
+:: --- Safety: NEVER delete self (yahi ek admin bachana hai) ---
 if /i "%TARGET%"=="%USERNAME%" (
-    echo  [SKIP] "%TARGET%" current logged-in user hai. Khud ko delete nahi kar sakte.
+    echo  [SKIP] "%TARGET%" current logged-in user hai. Yahi ek admin bachega, isko delete nahi kar sakte.
     exit /b 0
 )
 
-:: --- Safety: protected system accounts / profiles ---
-for %%P in (Administrator Administrateur DefaultAccount Guest WDAGUtilityAccount Default Public "All Users" DefaultUser0 systemprofile LocalService NetworkService) do (
+:: --- Safety: sirf Windows service profiles skip (inhe delete karne se Windows toot jayega) ---
+:: NOTE: Guest / Administrator (dusra) / Default / Public / DefaultAccount ab DELETE honge - user ki demand par.
+for %%P in ("All Users" systemprofile LocalService NetworkService) do (
     if /i "%TARGET%"=="%%~P" (
-        echo  [SKIP] "%TARGET%" system/protected account hai. Skip kiya.
+        echo  [SKIP] "%TARGET%" Windows service profile hai. Isko skip kiya.
         exit /b 0
     )
+)
+
+:: --- Extra warning for Default / Public (template profiles) ---
+if /i "%TARGET%"=="Default" (
+    echo  [WARN] "Default" naye users ka template hai. Delete karne ke baad naye user banane me problem aa sakti hai. Phir bhi delete kar rahe...
+)
+if /i "%TARGET%"=="Public" (
+    echo  [WARN] "Public" shared folder hai. Delete karne ke baad shared data jayega. Phir bhi delete kar rahe...
+)
+
+:: --- Info: agar target admin hai to batado (self ke alawa sab admin delete honge) ---
+net localgroup Administrators 2>nul | findstr /I /C:"%TARGET%" >nul
+if not errorlevel 1 (
+    echo  [INFO] "%TARGET%" admin group ka member hai. Self ke alawa sab admin delete honge, isliye ise bhi delete kar rahe...
 )
 
 :: --- Check: does the account exist? ---
