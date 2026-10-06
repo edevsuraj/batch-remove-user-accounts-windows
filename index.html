@@ -257,8 +257,15 @@
   var BAT_URL = './Remove-User.bat';
   var codeEl = document.getElementById('code');
 
-  function copyText(t, okMsg) {
-    function done() { alert(okMsg); }
+  function flash(btn, msg) {
+    var original = btn.innerHTML;
+    btn.textContent = msg;
+    setTimeout(function () { btn.innerHTML = original; }, 2000);
+  }
+
+  function copyText(t, btn) {
+    function done() { flash(btn, 'Copied'); }
+    function fail() { flash(btn, 'Copy failed'); }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(t).then(done, function () { fallback(); });
     } else { fallback(); }
@@ -266,7 +273,7 @@
       var ta = document.createElement('textarea');
       ta.value = t; document.body.appendChild(ta); ta.select();
       try { document.execCommand('copy'); done(); }
-      catch (e) { alert('Copy failed — please select the text manually.'); }
+      catch (e) { fail(); }
       document.body.removeChild(ta);
     }
   }
@@ -282,10 +289,10 @@
   });
 
   document.getElementById('copyCode').addEventListener('click', function () {
-    copyText(codeEl.textContent, 'Script code copied to clipboard.');
+    copyText(codeEl.textContent, this);
   });
   document.getElementById('copyLink').addEventListener('click', function () {
-    copyText(new URL(BAT_URL, location.href).href, 'Download link copied to clipboard.');
+    copyText(new URL(BAT_URL, location.href).href, this);
   });
 </script>
 </body>
