@@ -121,6 +121,7 @@
   .dots i{width:10px; height:10px; border-radius:50%; background:#d4dae3; display:block}
   .code-title code{font-family:"JetBrains Mono",ui-monospace,monospace; color:var(--text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
   .btn-sm{padding:8px 14px; font-size:13.5px; border-radius:8px}
+  .btn:disabled{opacity:.5; cursor:not-allowed; transform:none}
   pre{background:var(--code-bg); border:1px solid var(--code-border); border-radius:11px; padding:18px; margin:0; overflow:auto; max-height:560px}
   pre code{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,monospace; font-size:12.8px; line-height:1.7; color:#d6e2f5; white-space:pre}
 
@@ -210,8 +211,8 @@
     <ol class="steps">
       <li>Download <code>Remove-User.bat</code> using the button above.<span class="hi">Upar diye button se <code>Remove-User.bat</code> download karein.</span></li>
       <li><strong>Right-click</strong> the file and choose <strong>Run as administrator</strong>.<span class="hi">File par <strong>Right-click</strong> karke <strong>Run as administrator</strong> chunein.</span></li>
-      <li>Choose <kbd>1</kbd> for the <strong>popup list</strong> — highlight accounts (<kbd>Ctrl</kbd> + click for multiple) and press <strong>OK</strong>. Choose <kbd>2</kbd> to type names manually instead.<span class="hi"><strong>Popup list</strong> ke liye <kbd>1</kbd> dabayein — account highlight karke (<kbd>Ctrl</kbd> + click se multiple) <strong>OK</strong> dabayein. Naam haath se likhne ke liye <kbd>2</kbd> chunein.</span></li>
-      <li>Confirm with <kbd>Y</kbd>. Each account (<code>net user /delete</code>), its profile folder and orphan registry entries are removed.<span class="hi"><kbd>Y</kbd> se confirm karein. Har account (<code>net user /delete</code>), uska profile folder aur orphan registry entry delete ho jayegi.</span></li>
+      <li>A <strong>popup list</strong> opens automatically — highlight accounts (<kbd>Ctrl</kbd> + click for multiple) and press <strong>OK</strong>. No typing, no questions.<span class="hi"><strong>Popup list</strong> apne aap khul jayegi — account highlight karke (<kbd>Ctrl</kbd> + click se multiple) <strong>OK</strong> dabayein. Na typing, na koi sawal.</span></li>
+      <li>Done. Each selected account (<code>net user /delete</code>), its profile folder and orphan registry entries are removed immediately.<span class="hi">Ho gaya. Har chuna hua account (<code>net user /delete</code>), uska profile folder aur orphan registry entry turant delete ho jayegi.</span></li>
       <li>Your own logged-in account is never deleted — it remains as the surviving admin.<span class="hi">Aapka khud ka logged-in account kabhi delete nahi hota — wahi bacha hua admin rahega.</span></li>
     </ol>
   </section>
@@ -223,7 +224,7 @@
         <code>Remove-User.bat</code>
         <span>&mdash; source, always in sync with the download | source, hamesha download ke saath sync me</span>
       </div>
-      <button class="btn btn-outline btn-sm" id="copyCode" type="button">
+      <button class="btn btn-outline btn-sm" id="copyCode" type="button" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
         Copy code | Code copy karein
       </button>
@@ -247,11 +248,11 @@
     </details>
     <details>
       <summary>The popup doesn't appear. What now? | Popup nahi aaya. Ab kya karein?</summary>
-      <p>The script falls back to manual typing automatically. Type names separated by spaces or commas, e.g. <kbd>test1 test2</kbd>, and press Enter.<span class="hi">Script automatically manual typing par chala jata hai. Naam space ya comma se alag karke likhein, jaise <kbd>test1 test2</kbd>, aur Enter dabayein.</span></p>
+      <p>Nothing is deleted — the script exits safely. If you cancelled the popup, just run it again. If it never opens, your PC is likely missing PowerShell popup support (needs PowerShell 3.0 or newer).<span class="hi">Kuch delete nahi hoga — script safely band ho jayegi. Agar aapne popup cancel kiya tha, to dobara chalao. Agar popup khulti hi nahi, to aapke PC me PowerShell popup support nahi hai (PowerShell 3.0 ya naya chahiye).</span></p>
     </details>
     <details>
       <summary>Does it work on Windows 7, 8 or XP? | Kya ye Windows 7, 8 ya XP par chalega?</summary>
-      <p>Yes, with automatic fallbacks. On <strong>Windows 8 / 10 / 11</strong> everything works including the popup picker. On <strong>Windows 7</strong> the popup needs PowerShell 3.0 or newer (present on most updated PCs) — otherwise the script falls back to manual typing, and deletion itself uses plain <code>net user</code> + folder delete, which work everywhere. On <strong>XP</strong> there is no popup (no PowerShell), so manual mode is used and the script also checks the old <code>Documents and Settings</code> profile path.<span class="hi">Haan, automatic fallback ke saath. <strong>Windows 8 / 10 / 11</strong> par popup picker samet sab chalta hai. <strong>Windows 7</strong> par popup ke liye PowerShell 3.0+ chahiye — warna manual typing, aur deletion <code>net user</code> + folder delete se hota hai jo har jagah chalta hai. <strong>XP</strong> par koi popup nahi (PowerShell nahi), manual mode chalta hai aur purana <code>Documents and Settings</code> path bhi check hota hai.</span></p>
+      <p>On <strong>Windows 8 / 10 / 11</strong> everything works including the popup picker. On <strong>Windows 7</strong> the popup needs PowerShell 3.0 or newer (present on most updated PCs). On <strong>XP</strong> there is no PowerShell so the popup cannot open — the script exits without deleting anything.<span class="hi"><strong>Windows 8 / 10 / 11</strong> par popup picker samet sab chalta hai. <strong>Windows 7</strong> par popup ke liye PowerShell 3.0+ chahiye (jyadatar updated PC me hota hai). <strong>XP</strong> par PowerShell nahi hai isliye popup khul nahi sakti — script bina kuch delete kiye band ho jayegi.</span></p>
     </details>
     <details>
       <summary>How is this page updated? | Ye page kaise update hota hai?</summary>
@@ -315,6 +316,7 @@
   }).then(function (buf) {
     document.getElementById('size').textContent = (buf.byteLength / 1024).toFixed(1) + ' KB';
     codeEl.textContent = new TextDecoder().decode(buf);
+    document.getElementById('copyCode').disabled = false;
   }).catch(function (e) {
     codeEl.textContent = 'Could not auto-load Remove-User.bat (' + e.message + '). Use the download button above or view the file in the repo.';
   });
